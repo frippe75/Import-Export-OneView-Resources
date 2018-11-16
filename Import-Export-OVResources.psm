@@ -1,10 +1,10 @@
 ##############################################################################
 #
-#   Export-OVResources.ps1
+#   Import-Export-OVResources.psm
 #
-#   - Export resources from OneView instaces or Synergy Composers to CSV files
+#   - Library module for exporting/importing resources from OneView instaces or Synergy Composers 
 #
-#   VERSION 2.0
+#   VERSION 3.0
 #
 # (C) Copyright 2013-2018 Hewlett Packard Enterprise Development LP
 ##############################################################################
@@ -34,178 +34,8 @@ THE SOFTWARE.
 
   .EXAMPLE
 
-     .\Export-OVResources.ps1 -All -OVApplianceIP 10.254.1.66 -OVAdminName Administrator -password <admin-password> -OVAuthDomain Local -OneViewModule HPOneView.410
-    The script connects to the SynergyComposer or OneView appliance using HPOneView.410 POSH module and exports all OV resources from a set of pre-defined CSV files
-
-    .\ Export-OVResources.ps1 -OVEthernetnetworksCSV .\net.csv 
-    Exports Ethernet networks to the net.csv file
-
-    .\Export-OVResources.ps1 -OVFCnetworksCSV .\fc.csv
-    Export FC networks to the fc.csv file
-
-    .\Export-OVResources.ps1 -OVLogicalInterConnectGroupCSV .\lig.csv
-    Export logical Interconnect groups to the lig.csv file
-
-    .\Export-OVResources.ps1 -OVUplinkSetCSV .\upl.csv
-    Export Uplink set to the upl.csv file
-
-    .\Export-OVResources.ps1 -OVEnclosureGroupCSV .\EG.csv
-    Export EnclosureGroup to the EG.csv file
-
-    .\Export-OVResources.ps1 -OVEnclosureCSV .\Enc.csv
-    Export Enclosure to the Enc.csv file
-
-    .\Export-OVResources.ps1 -OVProfileCSV .\profile.csv -OVProfileConnectionCSV .\connection.csv
-    Export server profiles to the profile.csv and connection.csv files
-
-    .\Export-OVResources.ps1 -All
-    Export all OV resources to a set of pre-defined CSV files
-
-  .PARAMETER OVApplianceIP                   
-    IP address of the  Synergy Composer or OV appliance
-
-  .PARAMETER OVAdminName                     
-    Administrator name of the appliance
-
-  .PARAMETER OVAdminPassword                 
-    Administrator s password
-
-  .PARAMETER OneViewModule
-    OneView POSH module -default is HPOneView.410 
-
-  .PARAMETER All
-    Export all resources
-
-  .PARAMETER OVEthernetNetworksCSV
-    Path to the CSV file containing Ethernet networks definition
-
-  .PARAMETER OVFCNetworksCSV
-    Path to the CSV file containing FC networks definition
-
-  .PARAMETER OVSANManagerCSV
-    Path to the CSV file containing SAN Managers definition
-
-  .PARAMETER OVStorageSystemCSV
-    Path to the CSV file containing Storage Systems definition
-
-  .PARAMETER OVLogicalInterConnectGroupSV
-    Path to the CSV file containing Logical Interconnect Group
-
-  .PARAMETER OVUpLinkSetCSV
-    Path to the CSV file containing UplinkSet
-
-  .PARAMETER OVEnclosureGroupCSV
-    Path to the CSV file containing Enclosure Group
-
-  .PARAMETER OVEnclosureCSV
-    Path to the CSV file containing Enclosure definition
-
-  .PARAMETER OVLogicalEnclosureCSV
-    Path to the CSV file containing Logical Enclosure definition
-
-  .PARAMETER OVProfileCSV
-    Path to the CSV file containing Server Profile definition
-
-  .PARAMETER OVProfileTemplateCSV
-    Path to the CSV file containing Server Profile Template definition
-
-  .PARAMETER OVProfileConnectionCSV
-    Path to the CSV file containing Profile Connections definition
-
-  .PARAMETER OVProfileLOCALStorageCSV
-    Path to the CSV file containing Profile LOCAL Storage definition
-
-  .PARAMETER OVProfileSANStorageCSV
-    Path to the CSV file containing Profile SAN Storage definition
-
-  .PARAMETER OVSANManagerCSV
-    Path to the CSV file containing SANManager definition
-
-  .PARAMETER OVStorageSystemCSV
-    Path to the CSV file containing Storage System definition
-
-  .PARAMETER OVStorageVolumeTemplateCSV
-    Path to the CSV file containing Storage Volume Template definition
-
-  .PARAMETER OVStorageVolumeCSV
-    Path to the CSV file containing Storage Volume definition
-
-  .PARAMETER OVAddressPoolCSV
-    Path to the CSV file containing Address Pool definition
-
-  .PARAMETER OVwwnnCSV
-    Path to the CSV file containing WWnn definition
-
-  .PARAMETER OVIPAddressCSV
-    Path to the CSV file containing IP Address definitions
-
-  .PARAMETER OVBackupConfig
-    Path to the CSV file containing the scheduled OneView backup configurations, minus the login password to the remote server
-
-  .PARAMETER OVRSConfig
-    Path to the CSV file containing the OneView remote support configuration
-
-  .PARAMETER OVProxyCSV
-    Path to the CSV file containing the OneView proxy configuration
-
-  .PARAMETER OVLdapCSV
-    Path to the CSV file containing the LDAP configuration
-
-  .PARAMETER OVLdapGroupsCSV
-    Path to the CSV file containing the configured LDAP Groups
+   TODO: Complete this section with useful info
 #>
-
-
-# ------------------ Parameters
-Param ( [string]$OVApplianceIP                  = "", 
-        [string]$OVAdminName                    = "", 
-        [string]$OVAdminPassword                = "",
-        [string]$OVAuthDomain                   = "local",
-        [string]$OneViewModule                  = "HPOneView.410",
-
-        [switch]$All,
-
-        [string]$OVEthernetNetworksCSV          = "",
-        [string]$OVNetworkSetCSV                = "",
-        [string]$OVFCNetworksCSV                = "",
-
-        [string]$OVSANManagerCSV                = "",
-        [string]$OVStorageSystemCSV             = "",
-        [string]$OVStorageVolumeTemplateCSV     = "",
-        [string]$OVStorageVolumeCSV             = "",
-
-        [string]$OVLogicalInterConnectGroupCSV  = "",
-        [string]$OVUpLinkSetCSV                 = "",
-        [string]$OVEnclosureGroupCSV            = "",
-        [string]$OVDLServerCSV                  = "",
-        [string]$OVEnclosureCSV                 = "",
-        [string]$OVLogicalEnclosureCSV          = "",
-
-        [string]$OVProfileCSV                   = "",
-        [string]$OVProfileTemplateCSV           = "",
-        [string]$OVProfileConnectionCSV         = "",
-        [string]$OVProfileLOCALStorageCSV       = "",
-        [string]$OVProfileSANStorageCSV         = "",
-
-        [string]$OVAddressPoolCSV               = "",
-        [string]$OVwwnnCSV                      = "",
-        [string]$OVIPAddressCSV                 = "",
-        [string]$OVOSDeploymentCSV              = "",
-        [string]$OVTimeLocaleCSV                = "",
-        [string]$OVSmtpCSV                      = "",
-        [string]$OVAlertsCSV                    = "",
-        [string]$OVScopesCSV                    = "",
-        [string]$OVUsersCSV                     = "",
-        [string]$OVFWReposCSV                   = "",
-        [string]$OVBackupConfig                 = "",
-        [string]$OVRSConfig                     = "",
-        [string]$OVProxyCSV                     = "",
-        [string]$OVLdapCSV                      = "",
-        [string]$OVLdapGroupsCSV                = ""
-
-        
-
-)
 
 
 $DoubleQuote    = '"'
@@ -271,6 +101,22 @@ $ICTypes         = @{
 
 
 #------------------- Functions
+function Hash-From-Arrays($Array_keys, $Array_values) 
+{
+    $Keys 	= $Array_keys.split(",")
+    $Values = $Array_values.split(",")
+    
+	# Object to hold return object
+	$obj 	= @{}
+    $i 		= 0
+    
+	foreach($item in $Keys) {
+        $obj.Add($item, $Values[$i])
+        $i++
+    }
+    return $obj
+}
+
 function Get-Header-Values([PSCustomObject[]]$ObjList)
 {
     ForEach ($obj in $ObjList)
@@ -337,10 +183,10 @@ function Get-TypefromUri([string]$uri)
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-TimeLocale
+##      Function Get-TimeLocale
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-TimeLocale ([string]$OutFile)
+function Get-TimeLocale ()
 {
     $ValuesArray        = @()
     $TimeLocale         = Get-HPOVApplianceDateTime -ErrorAction Stop
@@ -362,24 +208,18 @@ function Export-TimeLocale ([string]$OutFile)
 
     $ValuesArray += "$Locale,$TimeZone,$SyncWithHost,$ListofNTP"
 
-    if ($ValuesArray)
-    {
-        Write-Host -ForegroundColor Cyan "Exporting Date and Locale information to CSV file --> $OVTimeLocaleCSV"
-        New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-        Set-Content -Path $OutFile -Value $TimeHeader
-        Add-Content -Path $OutFile -Value $ValuesArray
-    } else {
-        Write-Host -ForegroundColor Yellow "  Time and Locale not configured.  Skip exporting..."
-    }
+	return Hash-From-Arrays $TimeHeader $ValuesArray
+	# Fredrik Tarnell - Initially planned to return as a Tuple...
+    #return [System.Tuple]::Create($TimeHeader,$ValuesArray)	
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-SMTP
+##      Function Get-SMTP
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-SMTP ([string]$OutFile)
+function Get-SMTP ()
 {
     $ValuesArray        = @()
     $SmtpData           = Get-HPOVSMTPConfig -ErrorAction Stop
@@ -393,29 +233,18 @@ function Export-SMTP ([string]$OutFile)
         $Security       = if ($SmtpData.smtpProtocol -eq "PLAINTEXT") { "None" } else { $SmtpData.smtpProtocol }
     }
 
-    #
-    # If no SMTP Email addresss is configured, do not collect
-    #
-    if ($Email)
-    {
-        $ValuesArray += "$Email,$Password,$Server,$Port,$Security"
-
-        Write-Host -ForegroundColor Cyan "Exporting SMTP information to CSV file            --> $OVSmtpCSV"
-        New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-        Set-Content -Path $OutFile -Value $SmtpHeader
-        Add-Content -Path $OutFile -Value $ValuesArray
-    } else {
-        Write-Host -ForegroundColor Yellow "  SMTP not configured.  Skip exporting..."
-    }
+    $ValuesArray += "$Email,$Password,$Server,$Port,$Security"
+	
+    return Hash-From-Arrays $SmtpHeader $ValuesArray
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-LDAP
+##      Function Get-LDAP
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-LDAP ([string]$OutFile)
+function Get-LDAP ()
 {
     $ValuesArray    = @()
     $_BuiltInCertAuthorityCerts = @(
@@ -471,24 +300,16 @@ function Export-LDAP ([string]$OutFile)
         $ValuesArray += "$DIRname,$DIRprotocol,$DIRbaseDN,$DIRuser,$DIRpasswd,$DIRbinding,$DIRsvrIP,$DIRsvrPort"
     }
 
-    if ($ValuesArray)
-    {
-        Write-Host -ForegroundColor Cyan "Exporting LDAP information to CSV file            --> $OVLdapCSV"
-        New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-        Set-Content -Path $OutFile -Value $LDAPHeader
-        Add-Content -Path $OutFile -Value $ValuesArray
-    } else {
-        Write-Host -ForegroundColor Yellow "  Active Directory not configured.  Skip exporting..."
-    }
+	return Hash-From-Arrays $LDAPHeader $ValuesArray
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-Proxy
+##      Function Get-Proxy
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-Proxy ([string]$OutFile)
+function Get-Proxy ()
 {
     $ValuesArray        = @()
     $ProxyData          = Get-HPOVApplianceProxy -ErrorAction Stop
@@ -506,24 +327,16 @@ function Export-Proxy ([string]$OutFile)
         $ValuesArray += "$ProxyProtocol,$ProxyServer,$ProxyUsername,$ProxyPasswd,$ProxyPort"
     }
 
-    if ($ValuesArray)
-    {
-        Write-Host -ForegroundColor Cyan "Exporting Proxy Configuration to CSV file         --> $OVProxyCSV"
-        New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-        Set-Content -Path $OutFile -Value $ProxyHeader
-        Add-Content -Path $OutFile -Value $ValuesArray
-    } else {
-        Write-Host -ForegroundColor Yellow "  Proxy not configured.  Skip exporting..."
-    }
+	return Hash-From-Arrays $ProxyHeader $ValuesArray
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-Alerts
+##      Function Get-Alerts
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-Alerts ([string]$OutFile)
+function Get-Alerts ()
 {
     $ValuesArray        = @()
     $AlertData          = Get-HPOVSMTPConfig -ErrorAction Stop
@@ -544,25 +357,17 @@ function Export-Alerts ([string]$OutFile)
         }
         $ValuesArray += "$FilterName,$AlertFilter,$ListofEmails"
     }
-
-    if ($ValuesArray)
-    {
-        Write-Host -ForegroundColor Cyan "Exporting SMTP Alerts information to CSV file     --> $OVAlertsCSV"
-        New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-        Set-Content -Path $OutFile -Value $AlertHeader
-        Add-Content -Path $OutFile -Value $ValuesArray
-    } else {
-        Write-Host -ForegroundColor Yellow "  Alerts not configured.  Skip exporting..."
-    }
+	
+	return Hash-From-Arrays $AlertHeader $ValuesArray
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-Scopes
+##      Function Get-Scopes
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-Scopes ([string]$OutFile)
+function Get-Scopes ()
 {
     $ValuesArray        = @()
     $ScopeData          = Get-HPOVScope -ErrorAction Stop
@@ -603,24 +408,16 @@ function Export-Scopes ([string]$OutFile)
         }
     }
 
-    if ($ValuesArray)
-    {
-        Write-Host -ForegroundColor Cyan "Exporting Scope information to CSV file           --> $OVScopesCSV"
-        New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-        Set-Content -Path $OutFile -Value $ScopeHeader
-        Add-Content -Path $OutFile -Value $ValuesArray
-    } else {
-        Write-Host -ForegroundColor Yellow "  Scopes not configured.  Skip exporting..."
-    }
+	return Hash-From-Arrays $ScopeHeader $ValuesArray
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-Users
+##      Function Get-Users
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-Users ([string]$OutFile)
+function Get-Users ()
 {
     $ValuesArray        = @()
     $UserData           = Get-HPOVUser -ErrorAction Stop
@@ -661,24 +458,16 @@ function Export-Users ([string]$OutFile)
         }
     }
 
-    if ($ValuesArray)
-    {
-        Write-Host -ForegroundColor Cyan "Exporting User information to CSV file            --> $OVUsersCSV"
-        New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-        Set-Content -Path $OutFile -Value $UserHeader
-        Add-Content -Path $OutFile -Value $ValuesArray
-    } else {
-        Write-Host -ForegroundColor Yellow "  Users not configured.  Skip exporting..."
-    }
+	return Hash-From-Arrays $UserHeader $ValuesArray
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-Groups
+##      Function Get-Groups
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-Groups ([string]$OutFile)
+function Get-Groups ()
 {
     $ValuesArray        = @()
     $GroupData          = Get-HPOVLdapGroup -ErrorAction Stop
@@ -709,24 +498,16 @@ function Export-Groups ([string]$OutFile)
         }
     }
 
-    if ($ValuesArray)
-    {
-        Write-Host -ForegroundColor Cyan "Exporting LDAP Group information to CSV file      --> $OVLdapGroupsCSV"
-        New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-        Set-Content -Path $OutFile -Value $LDAPGroupHeader
-        Add-Content -Path $OutFile -Value $ValuesArray
-    } else {
-        Write-Host -ForegroundColor Yellow "  LDAP Groups not configured.  Skip exporting..."
-    }
+	return Hash-From-Arrays $LDAPGroupHeader $ValuesArray
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-FWRepos
+##      Function Get-FWRepos
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-FWRepos ([string]$OutFile)
+function Get-FWRepos ()
 {
     $ValuesArray        = @()
     $FWRepoData         = Get-HPOVBaselineRepository -Type External -ErrorAction Stop
@@ -743,24 +524,16 @@ function Export-FWRepos ([string]$OutFile)
         $ValuesArray += "$FWRepoName,$FWRepoUrl,$FWRepoUser,$FWRepoPass"
     }
 
-    if ($ValuesArray)
-    {
-        Write-Host -ForegroundColor Cyan "Exporting FW Repository information to CSV file   --> $OVFWReposCSV"
-        New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-        Set-Content -Path $OutFile -Value $FWRepoHeader
-        Add-Content -Path $OutFile -Value $ValuesArray
-    } else {
-        Write-Host -ForegroundColor Yellow "  Firmware Repositories not configured.  Skip exporting..."
-    }
+	return Hash-From-Arrays $FWRepoHeader $ValuesArray
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-OVNetwork
+##      Function Get-OVNetwork
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-OVNetwork ([string]$OutFile)
+function Get-OVNetwork ()
 {
     $ValuesArray      = @()
     $ListofNetworks   = Get-HPOVNetwork -Type Ethernet -ErrorAction Stop
@@ -853,24 +626,16 @@ function Export-OVNetwork ([string]$OutFile)
         $ValuesArray += "$nsName,$nspBW,$nsmBW,$ThisUplinkSet,$ThisLIG,$name,$type,$vLANID,$vLANType,$subnet,$typicalBW,$MaxBW,$SmartLink,$Private,$purpose"
     }
 
-    if ($ValuesArray)
-    {
-        Write-Host -ForegroundColor Cyan "Exporting Ethernet Networks to CSV file           --> $OVEthernetNetworksCSV"
-        New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-        Set-Content -Path $OutFile -Value $NetHeader
-        Add-Content -Path $OutFile -Value $ValuesArray
-    } else {
-        Write-Host -ForegroundColor Yellow "  Ethernet Networks not configured.  Skip exporting..."
-    }
+	return Hash-From-Arrays $NetHeader $ValuesArray
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-OVFCNetwork
+##      Function Get-OVFCNetwork
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-OVFCNetwork ([string]$OutFile)
+function Get-OVFCNetwork ()
 {
     $ValuesArray     = @()
     $ListofNetworks  = Get-HPOVNetwork | Where-Object Type -like "Fc*"
@@ -909,23 +674,15 @@ function Export-OVFCNetwork ([string]$OutFile)
         $ValuesArray += "$name,$description,$type,$fabrictype,$ManagedSAN,$VLANID,$typicalBW,$MaxBW,$autologin,$linkStab"
     }
 
-    if ($ValuesArray)
-    {
-        Write-Host -ForegroundColor Cyan "Exporting FC Network information to CSV file      --> $OVFCNetworksCSV"
-        New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-        Set-Content -Path $OutFile -Value $fcheader
-        Add-Content -Path $OutFile -Value $ValuesArray
-    } else {
-        Write-Host -ForegroundColor Yellow "  Fibre Channel Networks not configured.  Skip exporting..."
-    }
+	return Hash-From-Arrays $FCHeader $ValuesArray
 }
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-OVNetworkSet
+##      Function Get-OVNetworkSet
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-OVNetworkSet ([string]$OutFile)
+function Get-OVNetworkSet ()
 {
     $ValuesArray       = @()
     $ListofNetworkSets = Get-HPOVNetworkSet | Sort-Object Name
@@ -984,24 +741,16 @@ function Export-OVNetworkSet ([string]$OutFile)
         $ValuesArray     +=  "$nsname,$nsdescription,$nstypicalBW,$nsMaxBW,$ThisUplinkSet,$ThisLIG,$Networks,$nsnativenet"
     }
 
-    if ($ValuesArray)
-    {
-        Write-Host -ForegroundColor Cyan "Exporting Network Set information to CSV file     --> $OVNetworkSetCSV"
-        New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-        Set-Content -Path $OutFile -Value $NSHeader
-        Add-Content -Path $OutFile -Value $ValuesArray
-    } else {
-        Write-Host -ForegroundColor Yellow "  Network Sets not configured.  Skip exporting..."
-    }
+	return Hash-From-Arrays $NSHeader $ValuesArray
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-OVLogicalInterConnectGroup
+##      Function Get-OVLogicalInterConnectGroup
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-OVLogicalInterConnectGroup ([string]$OutFile)
+function Get-OVLogicalInterConnectGroup ()
 {
     $ICModuleTypes            = @{
         "VirtualConnectSE40GbF8ModuleforSynergy"    =  "SEVC40f8" ;
@@ -1167,15 +916,11 @@ function Export-OVLogicalInterConnectGroup ([string]$OutFile)
             $ValuesArray      += "$LIGName,$FrameCount,$InterConnectBaySet,$FabricModuleType,$BayConfig,$RedundancyType,$InternalNetworks,$IGMPSnooping,$IGMPIdleTimeout,$FastMacCacheFailover,$MacRefreshInterval,$NetworkLoopProtection,$PauseFloodProtection,$EnableRichTLV,$EnableLDPTagging"
         }
 
-        if ($ValuesArray)
-        {
-            Write-Host -ForegroundColor Cyan "Exporting Logical Interconnect Groups to CSV file --> $OVLogicalInterConnectGroupCSV"
-            New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-            Set-Content -Path $OutFile -Value $LigHeader
-            Add-Content -Path $OutFile -Value $ValuesArray
-        }
+		return Hash-From-Arrays $LigHeader $ValuesArray
+		
     } else {
         Write-Host -ForegroundColor Yellow "  Logical Interconnect Groups not configured.  Skip exporting..."
+		return null
     }
 }
 
@@ -1185,7 +930,7 @@ function Export-OVLogicalInterConnectGroup ([string]$OutFile)
 ##      Function Export-OVUplinkset
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-OVUplinkSet([string]$OutFile)
+function Get-OVUplinkSet()
 {
     $ValuesArray     = @()
     $ListofLIGs      = Get-HPOVlogicalInterconnectGroup | Sort-Object Name
@@ -1302,27 +1047,21 @@ function Export-OVUplinkSet([string]$OutFile)
             }
         }
 
-        if ($ValuesArray)
-        {
-            Write-Host -ForegroundColor Cyan "Exporting UpLinkSet information to CSV file       --> $OVUpLinkSetCSV"
-            New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-            Set-Content -Path $OutFile -Value $UplHeader
-            Add-Content -Path $OutFile -Value $ValuesArray
-        } else {
-            Write-Host -ForegroundColor Yellow "  Uplink Sets not configured.  Skip exporting..."
-        }
+		return Hash-From-Arrays $UplHeader $ValuesArray
+       
     } else {
         Write-Host -ForegroundColor Yellow "  No LIGs configured, so no Uplink Sets configured.  Skip exporting..."
+		return null
     }
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-OVEnclosureGroup
+##      Function Get-OVEnclosureGroup
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-OVEnclosureGroup([string]$OutFile)
+function Get-OVEnclosureGroup()
 {
     $ValuesArray          = @()
     $ListofEncGroups      = Get-HPOVEnclosureGroup | Sort-Object Name
@@ -1453,25 +1192,21 @@ function Export-OVEnclosureGroup([string]$OutFile)
             $ValuesArray  += "$EGName,$EGDescription,$EGLIGMapping,$EGEnclosureCount,$EGipV4AddressType,$EGAddressPool,$EGDeployMode,$EGDeployNetwork,$EGPowerMode"
         }
 
-        if ($ValuesArray)
-        {
-            Write-Host -ForegroundColor Cyan "Exporting EnclosureGroup information to CSV file  --> $OVEnclosureGroupCSV"
-            New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-            Set-Content -Path $OutFile -Value $EGHeader
-            Add-Content -Path $OutFile -Value $ValuesArray
-        }
+		return Hash-From-Arrays $EGHeader $ValuesArray
+		
     } else {
         Write-Host -ForegroundColor Yellow "  Enclosure Groups not configured.  Skip exporting..."
+		return null
     }
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-OVEnclosure
+##      Function Get-OVEnclosure
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-OVEnclosure([string]$OutFile)
+function Get-OVEnclosure()
 {
     $ValuesArray     = @()
     $ListofEncs      = Get-HPOVEnclosure | Sort-Object Name
@@ -1510,25 +1245,21 @@ function Export-OVEnclosure([string]$OutFile)
             $ValuesArray  += "$EGName,$EncName,$EncSN,$EncOAIP,$EncOAUser,$EncOAPassword,$EncLicensing,$EncFwIso,$EncFwInstall,$EncState"
         }
 
-        if ($ValuesArray)
-        {
-            Write-Host -ForegroundColor Cyan "Exporting Enclosure information to CSV file       --> $OVEnclosureCSV"
-            New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-            Set-Content -Path $OutFile -Value $EncHeader
-            Add-Content -Path $OutFile -Value $ValuesArray
-        }
+		return Hash-From-Arrays $EncHeader $ValuesArray
+
     } else {
         Write-Host -ForegroundColor Yellow "  Enclosures not configured.  Skip exporting..."
+		return null
     }
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-OVLogicalEnclosure
+##      Function Get-OVLogicalEnclosure
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-OVLogicalEnclosure([string]$OutFile)
+function Get-OVLogicalEnclosure()
 {
     $ValuesArray            = @()
     $ListofLogicalEncs      = Get-HPOVLogicalEnclosure | Sort-Object Name
@@ -1555,25 +1286,21 @@ function Export-OVLogicalEnclosure([string]$OutFile)
             $ValuesArray  += "$EncName,$EGenclosures,$EGName,$EncFWBaseLine,$EncFWInstall"
         }
 
-        if ($ValuesArray)
-        {
-            Write-Host -ForegroundColor Cyan "Exporting LogicalEnclosure resources to CSV file  --> $OVLogicalEnclosureCSV"
-            New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-            Set-Content -Path $OutFile -Value $LogicalEncHeader
-            Add-Content -Path $OutFile -Value $ValuesArray
-        }
+		return Hash-From-Arrays $LogicalEncHeader $ValuesArray
+
     } else {
         Write-Host -ForegroundColor Yellow "  Logical Enclosures not configured.  Skip exporting..."
+		return null
     }
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-OVDLServer
+##      Function Get-OVDLServer
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-OVDLServer([string]$OutFile)
+function Get-OVDLServer()
 {
     $ValuesArray     = @()
     $ListofServers   = Get-HPOVServer | Sort-Object Name
@@ -1604,26 +1331,19 @@ function Export-OVDLServer([string]$OutFile)
                 $ValuesArray  += "$ServerName,$AdminName,$AdminPassword,$Monitored,$LicensingIntent"
             }
         }
-
-        if ($ValuesArray)
-        {
-            Write-Host -ForegroundColor Cyan "Exporting DL Server information to CSV file       --> $OVDLServerCSV"
-            New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-            Set-Content -Path $OutFile -Value $DLServerHeader
-            Add-Content -Path $OutFile -Value $ValuesArray
-        } else {
-            Write-Host -ForegroundColor Yellow "  No DL Servers configured.  Skip exporting..."
-        }
+		
+		return Hash-From-Arrays $DLServerHeader $ValuesArray
+		
     }
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-ProfileConnection
+##      Function Get-ProfileConnection
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-OVProfileConnection($ProfileName, $ConnectionList)
+function Get-OVProfileConnection($ProfileName, $ConnectionList)
 {
     $ConnectionArray = @()
 
@@ -1673,10 +1393,10 @@ function Export-OVProfileConnection($ProfileName, $ConnectionList)
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-ProfileLOCALStorage
+##      Function Get-ProfileLOCALStorage
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-ProfileLOCALStorage($ProfileName, $LocalStorageList)
+function Get-ProfileLOCALStorage($ProfileName, $LocalStorageList)
 {
     # Use values as defined in POSH 3.0
     $DriveTypeValues = @{
@@ -1730,10 +1450,10 @@ function Export-ProfileLOCALStorage($ProfileName, $LocalStorageList)
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-ProfileSANStorage
+##      Function Get-ProfileSANStorage
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-ProfileSANStorage($ProfileName, $SANStorageList)
+function Get-ProfileSANStorage($ProfileName, $SANStorageList)
 {
     $HostOSList     = @{
         "Citrix Xen Server 5.x/6.x"     = "CitrixXen";
@@ -1793,7 +1513,7 @@ function Export-ProfileSANStorage($ProfileName, $SANStorageList)
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-Profile
+##      Function Get-Profile
 ##
 ## -------------------------------------------------------------------------------------------------------------
 function Export-OVProfile(  [string]$OutProfile,
@@ -1802,16 +1522,16 @@ function Export-OVProfile(  [string]$OutProfile,
                             [string]$OutSANStorageFile
                         )
 {
-     Export-ProfileOrTemplate -CreateProfile -OutProfileTemplate $OutProfile -outConnectionfile $outConnectionfile -OutLOCALStorageFile $OutLOCALStorageFile -OutSANStorageFile $OutSANStorageFile
+     Get-ProfileOrTemplate -CreateProfile -OutProfileTemplate $OutProfile -outConnectionfile $outConnectionfile -OutLOCALStorageFile $OutLOCALStorageFile -OutSANStorageFile $OutSANStorageFile
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-ProfileFROMTemplate
+##      Function Get-ProfileFROMTemplate
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-OVProfileFROMTemplate([string]$OutProfileFROMTemplate)
+function Get-OVProfileFROMTemplate([string]$OutProfileFROMTemplate)
 {
     $ValuesArray     = @()
     $OutFile         = $OutprofileFROMTemplate
@@ -1852,21 +1572,18 @@ function Export-OVProfileFROMTemplate([string]$OutProfileFROMTemplate)
             }
         }
 
-        if ($ValuesArray)
-        {
-            Set-Content -Path $OutFile -Value $ProfilePSTHeader
-            Add-Content -Path $OutFile -Value $ValuesArray
-        }
+		return Hash-From-Arrays $ProfilePSTHeader $ValuesArray
+
     }
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-ProfileOrTemplate
+##      Function Get-ProfileOrTemplate
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-ProfileOrTemplate(
+function Get-ProfileOrTemplate(
                 [string]$OutProfileTemplate,
                 [string]$OutConnectionfile,
                 [string]$OutLOCALStorageFile,
@@ -1982,11 +1699,11 @@ function Export-ProfileOrTemplate(
 
                 # Network and FC Connections
                 $pconnections         = $p.connectionSettings.connections
-                $ConnectionArray      += Export-OVProfileConnection -ProfileName $Name -ConnectionList $pconnections
+                $ConnectionArray      += Get-OVProfileConnection -ProfileName $Name -ConnectionList $pconnections
 
                 # SAN Storage Connections
                 $pSANStorage          = $p.sanStorage
-                $SANStorageArray      += Export-ProfileSANStorage -ProfileName $Name -SANStorageList $pSANStorage
+                $SANStorageArray      += Get-ProfileSANStorage -ProfileName $Name -SANStorageList $pSANStorage
             }
 
             # BootMode
@@ -2108,10 +1825,10 @@ function Export-ProfileOrTemplate(
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-OVSANManager
+##      Function Get-OVSANManager
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-OVSANManager([string]$Outfile)
+function Get-OVSANManager()
 {
     $ValuesArray          = @()
 
@@ -2165,24 +1882,17 @@ function Export-OVSANManager([string]$Outfile)
         $ValuesArray  += "$SMName,$SMType,$Username,$Password,$Port,$UseSSL,$AuthLevel,$AuthProtocol,$snmpUsername,$AuthPassword,$PrivProtocol,$PrivPassword"
     }
 
-    if ($ValuesArray)
-    {
-        Write-Host -ForegroundColor Cyan "Exporting SAN Manager information to CSV file     --> $OVSANManagerCSV"
-        New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-        Set-Content -Path $OutFile -Value $SANManagerHeader
-        Add-Content -Path $OutFile -Value $ValuesArray
-    } else {
-        Write-Host -ForegroundColor Yellow "  SAN Managers not configured.  Skip exporting..."
-    }
+	return Hash-From-Arrays $SANManagerHeader $ValuesArray
+
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-OVStorageSystem
+##      Function Get-OVStorageSystem
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-OVStorageSystem([string]$Outfile)
+function Get-OVStorageSystem()
 {
     $ValuesArray          = @()
 
@@ -2193,7 +1903,7 @@ function Export-OVStorageSystem([string]$Outfile)
         $hostName            = $Sts.hostname
         $Username            = $Sts.Credentials.username
         $Password            = '***Pwd N/A***'
-        $family              = $sts.family
+        $family              = $Sts.family
 
         $DomainName          = if ($family -eq 'StoreServ' ) { $Sts.deviceSpecificAttributes.managedDomain } else {''}
 
@@ -2226,24 +1936,17 @@ function Export-OVStorageSystem([string]$Outfile)
         $ValuesArray  += "$hostName,$Family,$Username,$Password,$StoragePorts,$DomainName,$StoragePools"
     }
 
-    if ($ValuesArray)
-    {
-        Write-Host -ForegroundColor Cyan "Exporting Storage System information to CSV file  --> $OVStorageSystemCSV"
-        New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-        Set-Content -Path $OutFile -Value $StSHeader
-        Add-Content -Path $OutFile -Value $ValuesArray
-    } else {
-        Write-Host -ForegroundColor Yellow "  Storage Systems not configured.  Skip exporting..."
-    }
+	return Hash-From-Arrays $StSHeader $ValuesArray
+
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-OVStorageVolumeTemplate
+##      Function Get-OVStorageVolumeTemplate
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-OVStorageVolumeTemplate([string]$Outfile)
+function Get-OVStorageVolumeTemplate()
 {
     $ValuesArray                = @()
 
@@ -2311,24 +2014,17 @@ function Export-OVStorageVolumeTemplate([string]$Outfile)
         $ValuesArray  += "$Name,$Description,$PoolName,$StorageSystem,$Capacity,$ProvisionType,$Shared,$Dedupe,$SnapShotPoolName,$DataProtection,$AOEnabled"
     }
 
-    if ($ValuesArray)
-    {
-        Write-Host -ForegroundColor Cyan "Exporting Storage Volume Templates to CSV file    --> $OVStorageVolumeTemplateCSV"
-        New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-        Set-Content -Path $OutFile -Value $StVolTemplateHeader
-        Add-Content -Path $OutFile -Value $ValuesArray
-    } else {
-        Write-Host -ForegroundColor Yellow "  Storage Volume Templates not configured.  Skip exporting..."
-    }
+	return Hash-From-Arrays $StVolTemplateHeader $ValuesArray
+
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-OVStorageVolume
+##      Function Get-OVStorageVolume
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-OVStorageVolume([string]$Outfile)
+function Get-OVStorageVolume()
 {
     $ValuesArray                = @()
 
@@ -2400,24 +2096,17 @@ function Export-OVStorageVolume([string]$Outfile)
         $ValuesArray  += "$Name,$Description,$PoolName,$StorageSystem,$VolumeTemplate,$Capacity,$ProvisionType,$Shared,$Dedupe,$SnapShotPoolName,$DataProtection,$AOEnabled"
     }
 
-    if ($ValuesArray)
-    {
-        Write-Host -ForegroundColor Cyan "Exporting Storage Volume information to CSV file  --> $OVStorageVolumeCSV"
-        New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-        Set-Content -Path $OutFile -Value $StVolumeHeader
-        Add-Content -Path $OutFile -Value $ValuesArray
-    } else {
-        Write-Host -ForegroundColor Yellow "  Storage Volumes not configured.  Skip exporting..."
-    }
+	return Hash-From-Arrays $StVolumeHeader $ValuesArray
+
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Export-OVAddressPool Function
+##      Get-OVAddressPool Function
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-OVAddressPool([string]$OutFile)
+function Get-OVAddressPool()
 {
     $ValuesArray = @()
     $ListofPools = Get-HPOVAddressPool | Sort-Object Name
@@ -2474,24 +2163,17 @@ function Export-OVAddressPool([string]$OutFile)
         }
     }
 
-    if ($ValuesArray)
-    {
-        Write-Host -ForegroundColor Cyan "Exporting Address Pools information to CSV file   --> $OVAddressPoolCSV"
-        New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-        Set-Content -Path $OutFile -Value $AddressPoolHeader
-        Add-Content -Path $OutFile -Value $ValuesArray
-    } else {
-        Write-Host -ForegroundColor Yellow "  Address Pools not configured.  Skip exporting..."
-    }
+	return Hash-From-Arrays $AddressPoolHeader $ValuesArray
+	
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-OVWWNN
+##      Function Get-OVWWNN
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-OVWwnn ([string]$OutFile)
+function Get-OVWwnn ()
 {
     $ValuesArray = @()
 
@@ -2513,25 +2195,21 @@ function Export-OVWwnn ([string]$OutFile)
             }
         }
 
-        if ($ValuesArray)
-        {
-            Write-Host -ForegroundColor Cyan "Exporting Wwnn information to CSV file            --> $OVWwnnCSV"
-            New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-            Set-Content -Path $OutFile -Value $wwnnHeader
-            Add-Content -Path $OutFile -Value $ValuesArray
-        }
+		return Hash-From-Arrays $wwnnHeader $ValuesArray
+
     } else {
         Write-Host -ForegroundColor Yellow "  No Server Profiles configured.  Skip generating WWNN CSV file..."
+		return null
     }
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-OVipAddress
+##      Function Get-OVipAddress
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-OVipAddress ([string]$OutFile)
+function Get-OVipAddress ()
 {
     $ValuesArray = @()
 
@@ -2587,24 +2265,18 @@ function Export-OVipAddress ([string]$OutFile)
         ## Next enclosure - Adding a blank line to the output file
         $ValuesArray += ",,,"
     }
-    if ($ValuesArray)
-    {
-        Write-Host -ForegroundColor Cyan "Exporting IP Address information to CSV file      --> $OVIPAddressCSV"
-        New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-        Set-Content -Path $OutFile -Value $IPHeader
-        Add-Content -Path $OutFile -Value $ValuesArray
-    } else {
-        Write-Host -ForegroundColor Yellow "  IP Addresses configured.  Skip exporting..."
-    }
+	
+	return Hash-From-Arrays $IPHeader $ValuesArray
+
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-OVOSDeployment
+##      Function Get-OVOSDeployment
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-OVOSDeployment ([string]$OutFile)
+function Get-OVOSDeployment ()
 {
     if ($global:ApplianceConnection.ApplianceType -eq 'Composer')
 	{
@@ -2639,26 +2311,19 @@ function Export-OVOSDeployment ([string]$OutFile)
 
             $ValuesArray      += "$OSName,$Desc,$MgmtNet,$OSappliancename"
         }
+		
+		return Hash-From-Arrays $OSDSHeader $ValuesArray
 
-        if ($ValuesArray)
-        {
-            Write-Host -ForegroundColor Cyan "Exporting OS Deployment information to CSV file   --> $OVOSDeploymentCSV"
-            New-Item $OutFile -ItemType file -Force -ErrorAction Stop | Out-Null
-            Set-Content -Path $OutFile -Value $OSDSHeader
-            Add-Content -Path $OutFile -Value $ValuesArray
-        } else {
-            Write-Host -ForegroundColor Yellow "  OS Deployment Servers not configured.  Skip exporting..."
-        }
     }
 }
 
 
 ## -------------------------------------------------------------------------------------------------------------
-##
-##      Function Export-BackupConfig
+##g
+##      Function Get-BackupConfig
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-BackupConfig([string]$Outfile)
+function Get-BackupConfig()
 {
     $ValuesArray                = @()
     $Backup_Config              = Get-HPOVAutomaticBackupConfig
@@ -2677,24 +2342,20 @@ function Export-BackupConfig([string]$Outfile)
 
         $ValuesArray            += "$remoteServerName,$remoteServerDir,$userName,$password,$protocol,$scheduleInterval,$scheduleDays,$scheduleTime,$remoteServerPublicKey"
 
-        if ($ValuesArray)
-        {
-            Write-Host -ForegroundColor Cyan "Exporting Remote Backup config to CSV file        --> $OVBackupConfig"
-            New-Item $Outfile -ItemType file -Force -ErrorAction Stop | Out-Null
-            Set-Content -Path $Outfile -Value $BackupHeader
-            Add-Content -Path $OutFile -Value $ValuesArray
-        }
+		return Hash-From-Arrays $BackupHeader $ValuesArray
+
     } else {
         Write-Host -ForegroundColor Yellow "  Remote Backups not configured.  Skip exporting..."
+		return null
     }
 }
 
 ## -------------------------------------------------------------------------------------------------------------
 ##
-##      Function Export-OVRSConfig
+##      Function Get-OVRSConfig
 ##
 ## -------------------------------------------------------------------------------------------------------------
-function Export-OVRSConfig([string]$Outfile)
+function Get-OVRSConfig()
 {
     $ValuesArray                = @()
     $OVRS_Config                = Get-HPOVRemoteSupport
@@ -2727,289 +2388,11 @@ function Export-OVRSConfig([string]$Outfile)
 
         $ValuesArray            += "$enabled,$company,$autoEnableDevices,$marketingOptIn,$insightOnlineEnabled,$firstName,$lastName,$email,$primaryPhone,$default,$streetAddress1,$streetAddress2,$city,$provinceState,$postalCode,$countryCode,$timeZone"
 
-        if ($ValuesArray)
-        {
-            Write-Host -ForegroundColor Cyan "Exporting OVRS config to CSV file        --> $OVRSConfig"
-            New-Item $Outfile -ItemType file -Force -ErrorAction Stop | Out-Null
-            Set-Content -Path $Outfile -Value $OVRSHeader
-            Add-Content -Path $OutFile -Value $ValuesArray
-        }
+		return Hash-From-Arrays $OVRSHeader $ValuesArray
+
     } else {
         Write-Host -ForegroundColor Yellow "  OVRS not configured.  Skip exporting..."
+		return null
     }
 }
 
-
-# -------------------------------------------------------------------------------------------------------------
-#
-#       Main Entry
-#
-# -------------------------------------------------------------------------------------------------------------
-
-# ---------------- Unload any earlier versions of the HPOneView POSH modules
-#
-Remove-Module -ErrorAction SilentlyContinue HPOneView.120
-Remove-Module -ErrorAction SilentlyContinue HPOneView.200
-Remove-Module -ErrorAction SilentlyContinue HPOneView.300
-Remove-Module -ErrorAction SilentlyContinue HPOneView.310
-Remove-Module -ErrorAction SilentlyContinue HPOneView.400
-
-if (-not (get-module $OneViewModule))
-{
-    Import-Module -Name $OneViewModule
-}
-
-# ---------------- Connect to Synergy Composer
-#
-if ( (-not $OVApplianceIP) -or (-not $OVAdminName))
-{
-	$OVApplianceIP      = Read-Host 'Synergy Composer IP Address'
-	$OVAdminName        = Read-Host 'Administrator Username'
-	$OVAdminPassword    = Read-Host 'Administrator Password' -AsSecureString
-
-    $global:ApplianceConnection = Connect-HPOVMgmt -appliance $OVApplianceIP -user $OVAdminName -password $OVAdminPassword  -AuthLoginDomain $OVAuthDomain -errorAction stop
-
-    if (-not $ConnectedSessions)
-    {
-        Write-Host "Login to Synergy Composer or OV appliance failed.  Exiting."
-        Exit
-    }
-}
-
-if ($ConnectedSessions)
-{
-    $OVProfileTemplateConnectionCSV = ""
-    $OVProfileTemplateLOCALStorageCSV = ""
-    $OVProfileTemplateSANStorageCSV = ""
-
-    if ($All)
-    {
-        $OVEthernetNetworksCSV                  = "EthernetNetworks.csv"
-        $OVNetworkSetCSV                        = "NetworkSet.csv"
-        $OVFCNetworksCSV                        = "FCNetworks.csv"
-
-        $OVLogicalInterConnectGroupCSV          = "LogicalInterConnectGroup.csv"
-        $OVUplinkSetCSV                         = "UpLinkSet.csv"
-
-        $OVEnclosureGroupCSV                    = "EnclosureGroup.csv"
-        $OVEnclosureCSV                         = "Enclosure.csv"
-        $OVLogicalEnclosureCSV                  = "LogicalEnclosure.csv"
-        $OVDLServerCSV                          = "DLServers.csv"
-
-        $OVProfileCSV                           = "Profiles.csv"
-        $OVProfileTemplateCSV                   = "ProfileTemplate.csv"
-        $OVProfileConnectionCSV                 = "ProfileConnection.csv"
-        $OVProfileLOCALStorageCSV               = "ProfileLOCALStorage.csv"
-        $OVProfileSANStorageCSV                 = "ProfileSANStorage.csv"
-
-        $OVProfileTemplateConnectionCSV         = "ProfileTemplateConnection.csv"
-        $OVProfileTemplateLOCALStorageCSV       = "ProfileTemplateLOCALStorage.csv"
-        $OVProfileTemplateSANStorageCSV         = "ProfileTemplateSANStorage.csv"
-
-        $OVSanManagerCSV                        = "SANManager.csv"
-        $OVStorageSystemCSV                     = "StorageSystems.csv"
-        $OVStorageVolumeTemplateCSV             = "StorageVolumeTemplate.csv"
-        $OVStorageVolumeCSV                     = "StorageVolume.csv"
-
-        $OVAddressPoolCSV                       = "AddressPool.csv"
-        $OVWwnnCSV                              = "Wwnn.csv"
-        $OVIPAddressCSV                         = "IPAddress.csv"
-        $OVOSDeploymentCSV                      = "OSDeployment.csv"
-
-        $OVTimeLocaleCSV                        = "TimeLocale.csv"
-        $OVSmtpCSV                              = "SMTP.csv"
-        $OVAlertsCSV                            = "Alerts.csv"
-        $OVScopesCSV                            = "Scopes.csv"
-        $OVUsersCSV                             = "Users.csv"
-        $OVFWReposCSV                           = "FWRepositories.csv"
-        $OVBackupConfig                         = "BackupConfigurations.csv"
-        $OVRSConfig                             = "OVRSConfiguration.csv"
-        $OVProxyCSV                             = "Proxy.csv"
-        $OVLdapCSV                              = "LDAP.csv"
-        $OVLdapGroupsCSV                        = "LDAPGroups.csv"
-    }
-
-
-    if (-not [string]::IsNullOrEmpty($OVFWReposCSV))
-    {
-        Export-FWRepos -Outfile $OVFWReposCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVTimeLocaleCSV))
-    {
-        Export-TimeLocale -Outfile $OVTimeLocaleCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVProxyCSV))
-    {
-        Export-Proxy -Outfile $OVProxyCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVSmtpCSV))
-    {
-        Export-SMTP -Outfile $OVSmtpCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVLdapCSV))
-    {
-        Export-LDAP -Outfile $OVLdapCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVAlertsCSV))
-    {
-        Export-Alerts -Outfile $OVAlertsCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVAddressPoolCSV))
-    {
-        Export-OVAddressPool -Outfile $OVAddressPoolCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVwwnnCSV))
-    {
-        Export-OVWwnn -Outfile $OVWwnnCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVIPAddressCSV))
-    {
-        Export-OVIPAddress -Outfile $OVIPAddressCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVOSDeploymentCSV))
-    {
-        Export-OVOSDeployment -Outfile $OVOSDeploymentCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVEthernetNetworksCSV))
-    {
-        Export-OVNetwork -OutFile $OVEthernetNetworksCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVNetworkSetCSV))
-    {
-        Export-OVNetworkSet -OutFile $OVNetworkSetCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVFCNetworksCSV))
-    {
-        Export-OVFCNetwork -OutFile $OVFCNetworksCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVSANManagerCSV))
-    {
-        Export-OVSANManager -OutFile $OVSANManagerCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVStorageSystemCSV))
-    {
-        Export-OVStorageSystem -OutFile $OVStorageSystemCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVStorageVolumeTemplateCSV))
-    {
-        Export-OVStorageVolumeTemplate -OutFile $OVStorageVolumeTemplateCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVStorageVolumeCSV))
-    {
-        Export-OVStorageVolume -OutFile $OVStorageVolumeCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVScopesCSV))
-    {
-        Export-Scopes -Outfile $OVScopesCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVUsersCSV))
-    {
-        Export-Users -Outfile $OVUsersCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVLdapGroupsCSV))
-    {
-        Export-Groups -Outfile $OVLdapGroupsCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVLogicalInterConnectGroupCSV))
-    {
-        Export-OVLogicalInterConnectGroup -OutFile $OVLogicalInterConnectGroupCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVUplinkSetCSV))
-    {
-        Export-OVUpLinkSet -OutFile $OVUplinkSetCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVEnclosureGroupCSV))
-    {
-        Export-OVEnclosureGroup -OutFile $OVEnclosureGroupCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVEnclosureCSV))
-    {
-        Export-OVEnclosure -OutFile $OVEnclosureCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVLogicalEnclosureCSV))
-    {
-        Export-OVLogicalEnclosure -OutFile $OVLogicalEnclosureCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVDLServerCSV))
-    {
-        Export-OVDLServer -OutFile $OVDLServerCSV
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVBackupConfig))
-    {
-        Export-BackupConfig -Outfile $OVBackupConfig
-    }
-
-    if (-not [string]::IsNullOrEmpty($OVRSConfig))
-    {
-        Export-OVRSConfig -Outfile $OVRSConfig
-    }
-
-    if ( -not [string]::IsNullOrEmpty($OVProfileCSV)             -and `
-         -not [string]::IsNullOrEmpty($OVProfileConnectionCSV)   -and `
-         -not [string]::IsNullOrEmpty($OVProfileLOCALStorageCSV) -and `
-         -not [string]::IsNullOrEmpty($OVProfileSANStorageCSV) )
-    {
-        Export-ProfileorTemplate -CreateProfile -OutprofileTemplate $OVProfileCSV -outConnectionfile $OVProfileConnectionCSV -OutLOCALStorageFile $OVProfileLOCALStorageCSV -OutSANStorageFile $OVProfileSANStorageCSV
-
-        $OVProfileConnectionCSV = ""
-        $OVProfileLOCALStorageCSV = ""
-        $OVProfileSANStorageCSV = ""
-    }
-
-    if ( -not [string]::IsNullOrEmpty($OVProfileTemplateCSV)             -and `
-         -not [string]::IsNullOrEmpty($OVProfileTemplateConnectionCSV)   -and `
-         -not [string]::IsNullOrEmpty($OVProfileTemplateLOCALStorageCSV) -and `
-         -not [string]::IsNullOrEmpty($OVProfileTemplateSANStorageCSV) )
-    {
-        Export-ProfileorTemplate -OutprofileTemplate $OVProfileTemplateCSV -OutConnectionfile $OVProfileTemplateConnectionCSV -OutLOCALStorageFile $OVProfileTemplateLOCALStorageCSV -OutSANStorageFile $OVProfileTemplateSANStorageCSV
-
-        $OVProfileTemplateConnectionCSV = ""
-        $OVProfileTemplateLOCALStorageCSV = ""
-        $OVProfileTemplateSANStorageCSV = ""
-    }
-
-
-    Write-Host -ForegroundColor Cyan "`nDisconnecting from OneView/Synergy...`n"
-    Write-Host -ForegroundColor Cyan "----------------------------------------------------------------------"
-    Write-Host -ForegroundColor Cyan "The script does not export credentials of OneView/Synergy resources."
-    Write-Host -ForegroundColor Cyan "Before importing resources, update credentials in the following files:"
-    Write-Host -ForegroundColor Cyan "  - SANManager.csv"
-    Write-Host -ForegroundColor Cyan "  - StorageSystems.csv"
-    Write-Host -ForegroundColor Cyan "  - Enclosure.csv"
-    Write-Host -ForegroundColor Cyan "  - DLServers.csv"
-    Write-Host -ForegroundColor Cyan "  - SMTP.csv"
-    Write-Host -ForegroundColor Cyan "  - Users.csv"
-    Write-Host -ForegroundColor Cyan "  - FWRepositories.csv"
-    Write-Host -ForegroundColor Cyan "  - BackupConfigurations.csv"
-    Write-Host -ForegroundColor Cyan "  - Proxy.csv"
-    Write-Host -ForegroundColor Cyan "  - LDAP.csv"
-    Write-Host -ForegroundColor Cyan "  - LDAPGroups.csv"
-    Write-Host -ForegroundColor Cyan "----------------------------------------------------------------------`n"
-    Disconnect-HPOVMgmt
-}
